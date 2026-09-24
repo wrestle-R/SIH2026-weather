@@ -3,6 +3,21 @@
 import { LocateFixed, Minus, Plus, Radar, Waves } from "lucide-react";
 import { useState, type CSSProperties } from "react";
 import { hazardColors, type WeatherEvent } from "@/lib/weather-data";
+import { indiaStatePaths } from "@/lib/india-state-paths";
+
+function projectEventCoordinates(coordinates: string) {
+  const latitude = coordinates.match(/([\d.]+)\s*°?\s*([NS])/i);
+  const longitude = coordinates.match(/([\d.]+)\s*°?\s*([EW])/i);
+
+  if (!latitude || !longitude) return null;
+
+  const lat = Number(latitude[1]) * (latitude[2].toUpperCase() === "S" ? -1 : 1);
+  const lon = Number(longitude[1]) * (longitude[2].toUpperCase() === "W" ? -1 : 1);
+  return {
+    x: 30 + (lon - 67) * 13.3,
+    y: 25 + (37.5 - lat) * 14.1,
+  };
+}
 
 type IndiaWeatherMapProps = {
   events: WeatherEvent[];
@@ -60,22 +75,19 @@ export function IndiaWeatherMap({
           </filter>
         </defs>
 
-        <path
-          className="india-outline"
-          d="M148 54 L176 40 L196 47 L211 37 L235 43 L251 57 L278 61 L294 72 L314 72 L329 88 L353 97 L371 118 L359 133 L331 137 L315 151 L301 155 L298 173 L283 182 L276 205 L260 221 L258 245 L247 265 L247 293 L234 312 L229 339 L215 360 L203 390 L190 414 L176 396 L169 367 L153 346 L146 320 L130 303 L118 276 L99 257 L91 232 L73 220 L67 197 L78 176 L69 158 L81 139 L76 118 L92 104 L104 82 L124 78 Z"
-          fill="url(#indiaFill)"
-          stroke="#78c8d7"
-          strokeOpacity="0.62"
-          strokeWidth="1.4"
-        />
-        <path
-          d="M146 78 L151 118 M102 105 L142 137 L183 141 L224 118 M80 176 L124 181 L168 172 L211 184 L258 164 M95 232 L139 225 L183 240 L232 217 M123 300 L169 282 L225 293 M151 346 L203 331 M186 143 L179 203 L168 282 M226 120 L211 184 L232 217 L225 293"
-          fill="none"
-          stroke="#8fd3df"
-          strokeDasharray="3 5"
-          strokeOpacity="0.19"
-          strokeWidth="0.8"
-        />
+        <g className="india-outline">
+          {indiaStatePaths.map((path, index) => (
+            <path
+              d={path}
+              fill="url(#indiaFill)"
+              key={index}
+              stroke="#8bd4de"
+              strokeLinejoin="round"
+              strokeOpacity="0.48"
+              strokeWidth="1.15"
+            />
+          ))}
+        </g>
         <path
           d="M0 0 H460 V500 H0 Z"
           fill="url(#mapGrid)"
@@ -83,8 +95,9 @@ export function IndiaWeatherMap({
         />
 
         {events.map((event) => {
-          const x = (event.mapX / 100) * 390 + 20;
-          const y = (event.mapY / 100) * 430 + 18;
+          const point = projectEventCoordinates(event.coordinates);
+          const x = point?.x ?? (event.mapX / 100) * 390 + 20;
+          const y = point?.y ?? (event.mapY / 100) * 430 + 18;
           const isSelected = event.id === selectedId;
           const color = hazardColors[event.type];
 
