@@ -1,6 +1,7 @@
 "use client";
 
 import { LocateFixed, Minus, Plus, Radar, Waves } from "lucide-react";
+import { useState, type CSSProperties } from "react";
 import { hazardColors, type WeatherEvent } from "@/lib/weather-data";
 
 type IndiaWeatherMapProps = {
@@ -16,16 +17,18 @@ export function IndiaWeatherMap({
   onSelect,
   t,
 }: IndiaWeatherMapProps) {
+  const [zoom, setZoom] = useState(1);
+
   return (
     <div className="map-shell">
       <div className="map-toolbar" aria-label="Map controls">
-        <button type="button" aria-label="Zoom in">
+        <button type="button" aria-label="Zoom in" disabled={zoom >= 1.4} onClick={() => setZoom((value) => Math.min(1.4, value + 0.1))}>
           <Plus size={15} />
         </button>
-        <button type="button" aria-label="Zoom out">
+        <button type="button" aria-label="Zoom out" disabled={zoom <= 0.9} onClick={() => setZoom((value) => Math.max(0.9, value - 0.1))}>
           <Minus size={15} />
         </button>
-        <button type="button" aria-label="Center map">
+        <button type="button" aria-label="Center map" onClick={() => setZoom(1)}>
           <LocateFixed size={15} />
         </button>
       </div>
@@ -35,6 +38,7 @@ export function IndiaWeatherMap({
 
       <svg
         className="india-map"
+        style={{ "--map-zoom": zoom } as CSSProperties}
         viewBox="0 0 460 500"
         role="img"
         aria-label="India weather incident map"

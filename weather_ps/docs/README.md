@@ -5,4 +5,4 @@
 - [India data source plan](./data-sources.md) — official and public integration plan
 - [SIH demo script](./demo-script.md) — recommended four-minute presentation and judge Q&A
 
-The interface is a functional prototype with simulated records. Documentation separates demonstrated behaviour from proposed production infrastructure.
+The interface uses deterministic simulated records for a reliable judging demo. Documentation separates demonstrated behaviour from proposed production infrastructure.

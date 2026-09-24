@@ -44,6 +44,7 @@ IMD / MOSDAC / SACHET / CWC / datasets / citizen app / news-social signals
 - **Analytics:** ClickHouse or Apache Druid for high-volume time-series/event analytics
 - **ML services:** Python/FastAPI services for classifiers, embeddings, media forensics, and confidence calibration
 - **Web:** Next.js dashboard with server-side authorization and streamed updates through SSE or WebSockets
+- **Translation:** a server-only Next.js route calls Google Cloud Translation Basic (v2); English is the default and Hindi/Marathi use bundled fallbacks for offline demos
 - **Observability:** OpenTelemetry, Prometheus, and Grafana with per-source freshness SLOs
 
 ## Canonical event model
@@ -83,4 +84,3 @@ Critical alerts must never rely solely on a generative model. Confidence thresho
 - define retention policies per source agreement
 - document consent and grievance workflows for citizen submissions
 - run bias and calibration reviews across languages, regions, and connectivity levels
-

@@ -1,0 +1,1 @@
+{"timestamp":"2026-09-24T10:18:20.009Z","event_type":"alert","src_ip":"172.16.5.44","src_port":51888,"dest_ip":"10.1.4.20","dest_port":445,"proto":"TCP","in_iface":"eth1","alert":{"action":"blocked","signature_id":2024218,"signature":"ET EXPLOIT Possible SMB exploit attempt","category":"Attempted Administrator Privilege Gain","severity":1},"host":"ids-north-01"}

@@ -6,27 +6,27 @@
 
 “During severe weather, the same incident arrives through official warnings, gauges, posts, videos, and citizen calls. Operators lose time separating real events from duplicates and misleading media. Varunetra turns that noise into one evidence-backed national picture.”
 
-Point to the four top metrics: active events, report scale, verification rate, and duplicates merged.
+Start on **Command overview** and point to the four top metrics: active events, report scale, verification rate, and duplicates merged.
 
 ### 0:35–1:35 — Show event discovery
 
-Use the event-type filter and select the Guwahati flood marker. Explain that the panel preserves the original source, extracts time/location, clusters matching reports, and displays the evidence behind the confidence score.
+Open **Live event stream**, use the event-type filter, and select the Guwahati flood marker. Explain that the platform preserves the original source, extracts time/location, clusters matching reports, and displays the evidence behind the confidence score.
 
 Search for “Mumbai” to demonstrate location retrieval, then clear the query.
 
 ### 1:35–2:25 — Explain the intelligence pipeline
 
-Scroll to “From noise to trust.” Walk through ingestion, deduplication, AI scoring, and verified events. Emphasize that the model score is explainable and policy-controlled.
+Open **Pipeline health**. Walk through ingestion, normalization, AI verification, and indexing. Emphasize that the model score is explainable and policy-controlled, then use the retry action to demonstrate recoverable operations.
 
-Use the 12-hour chart to show that the system distinguishes report volume from verified-event volume.
+Open **Analytics** and use the 12-hour chart to show that the system distinguishes report volume from verified-event volume.
 
 ### 2:25–3:15 — Demonstrate human oversight
 
-Open the verification queue. Approve the Dehradun report and flag the recycled Puri cyclone video. Explain that high-impact or uncertain reports are always routed to an authorized analyst and every action is audited.
+Open **Verification queue**. Approve the Dehradun report and flag the recycled Puri cyclone video. Explain that high-impact or uncertain reports are always routed to an authorized analyst and every action is audited.
 
 ### 3:15–3:45 — Show national readiness
 
-Point to the connected data fabric: IMD, MOSDAC, NDMA SACHET, citizen reports, and public signals. Toggle a public source to show connector control. Explain that official warnings remain authoritative.
+Open **Source registry** to show IMD, MOSDAC, NDMA SACHET, citizen reports, and public signals. Toggle a public source, test the connectors, and explain that official warnings remain authoritative. Finish in **Alert centre** by generating a citizen-facing advisory preview.
 
 ### 3:45–4:00 — Close with impact
 

@@ -21,7 +21,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. Use **Parser Lab** for the fastest jury path.
+Open `http://localhost:3000`. Select **Watch live demo** for the automatic jury showcase, then use **Parser Lab** to upload one of the files in `next/public/samples` or your own perimeter log.
 
 ## Verification
 

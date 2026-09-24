@@ -1,0 +1,1 @@
+CEF:0|Palo Alto Networks|PAN-OS|11.1|THREAT-8001|Suspicious outbound connection|8|src=10.24.8.19 dst=198.51.100.42 spt=51244 dpt=443 proto=TCP act=blocked deviceExternalId=PA-EDGE-01 rt=Sep 24 2026 10:14:12 UTC msg=Known command and control endpoint

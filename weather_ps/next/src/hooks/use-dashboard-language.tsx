@@ -1,6 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   getFallbackTranslations,
   translatableTexts,
@@ -14,11 +23,21 @@ type TranslationResponse = {
   provider?: "google-cloud" | "bundled-fallback";
 };
 
+type LanguageContextValue = {
+  language: LanguageCode;
+  changeLanguage: (language: LanguageCode) => Promise<void>;
+  isTranslating: boolean;
+  provider: TranslationProvider;
+  t: (text: string) => string;
+};
+
+const DashboardLanguageContext = createContext<LanguageContextValue | null>(null);
+
 function createDictionary(texts: readonly string[], translatedTexts: string[]) {
   return Object.fromEntries(texts.map((text, index) => [text, translatedTexts[index] ?? text]));
 }
 
-export function useDashboardLanguage() {
+export function DashboardLanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<LanguageCode>("en");
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [provider, setProvider] = useState<TranslationProvider>("english");
@@ -74,11 +93,22 @@ export function useDashboardLanguage() {
     [language, translations],
   );
 
-  return {
-    language,
-    changeLanguage,
-    isTranslating: provider === "loading",
-    provider,
-    t,
-  };
+  const value = useMemo(
+    () => ({ language, changeLanguage, isTranslating: provider === "loading", provider, t }),
+    [changeLanguage, language, provider, t],
+  );
+
+  return (
+    <DashboardLanguageContext.Provider value={value}>
+      {children}
+    </DashboardLanguageContext.Provider>
+  );
+}
+
+export function useDashboardLanguage() {
+  const context = useContext(DashboardLanguageContext);
+  if (!context) {
+    throw new Error("useDashboardLanguage must be used inside DashboardLanguageProvider");
+  }
+  return context;
 }

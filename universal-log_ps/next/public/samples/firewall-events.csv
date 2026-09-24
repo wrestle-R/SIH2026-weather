@@ -1,0 +1,3 @@
+timestamp,device,src_ip,src_port,dst_ip,dst_port,protocol,action,severity,message
+2026-09-24T10:20:01Z,branch-fw-01,10.8.0.14,51004,203.0.113.9,443,tcp,allow,3,TLS egress allowed
+2026-09-24T10:20:04Z,branch-fw-01,198.51.100.9,44210,10.8.0.2,3389,tcp,deny,8,RDP ingress blocked

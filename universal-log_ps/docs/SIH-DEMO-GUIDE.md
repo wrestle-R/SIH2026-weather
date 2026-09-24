@@ -4,11 +4,11 @@
 
 **0:00-0:15 | Frame the problem**
 
-Open Command Center. Say: “Perimeter devices speak different formats. ULPF gives them one security language without discarding the original evidence.” Point to the six-stage pipeline and clearly labeled demo coverage.
+Open the Overview. Say: “Perimeter devices speak different formats. ULPF gives them one security language without discarding the original evidence.” Select **Watch live demo**; the showcase begins automatically.
 
 **0:15-0:55 | Prove normalization**
 
-Open Parser Lab with the Palo Alto CEF fixture. Select Normalize Event. Show automatic format confidence, OCSF 1.9 output, the ECS export tab and field lineage. Switch to Suricata JSON or RFC 5424 and repeat to show the same target fields.
+Let the showcase cycle from Palo Alto CEF to Suricata JSON and RFC 5424 Syslog. Point out the automatic format confidence, OCSF output, field lineage, and verified evidence fingerprint. Then open **Parser Lab** and upload `next/public/samples/palo-alto-cef.log` to prove that the same pipeline accepts files.
 
 **0:55-1:20 | Prove losslessness**
 

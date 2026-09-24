@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { AppShell } from "@/components/app-shell";
+import { DashboardLanguageProvider } from "@/hooks/use-dashboard-language";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -21,9 +23,16 @@ const barlow = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "Varunetra — National Weather Intelligence",
+  title: {
+    default: "Varunetra — National Weather Intelligence",
+    template: "%s — Varunetra",
+  },
   description:
-    "SIH 2026 prototype for multi-source, AI-assisted weather event intelligence across India.",
+    "Multi-source, AI-assisted weather event intelligence across India.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/favicon.ico" }],
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -32,7 +41,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${plexSans.variable} ${plexMono.variable} ${barlow.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <DashboardLanguageProvider>
+          <AppShell>{children}</AppShell>
+        </DashboardLanguageProvider>
+      </body>
     </html>
   );
 }
