@@ -123,10 +123,10 @@ export function IndiaWeatherMap({
               {isSelected ? (
                 <g className="map-label">
                   <rect x={x + 13} y={y - 25} width="116" height="43" rx="4" fill="#f5f1e8" />
-                  <text x={x + 23} y={y - 8} fill="#0a2638" fontSize="11" fontWeight="700">
+                  <text x={x + 23} y={y - 8} fill="#0a2638" fontSize="12" fontWeight="700">
                     {event.city}
                   </text>
-                  <text x={x + 23} y={y + 8} fill="#58707d" fontSize="9">
+                  <text x={x + 23} y={y + 8} fill="#58707d" fontSize="12">
                     {t(event.type)} · {event.confidence}%
                   </text>
                 </g>
