@@ -8,6 +8,10 @@ Varunetra turns noisy, duplicated, multi-source weather reports into a trusted n
 
 Weather intelligence is fragmented across official APIs, satellite products, news, social media, public datasets, and citizen observations. The difficult part is not collection alone: operators must determine whether a report is current, local, unique, and trustworthy before acting on it.
 
+### Problem-statement jurisdiction
+
+The supplied brief is national in scope and is not tied to one Indian state. The prototype therefore defaults to English, includes Hindi for national operations, and adds Marathi as the requested regional language. The translation architecture can extend to other scheduled Indian languages.
+
 Varunetra addresses this with one pipeline:
 
 1. Ingest heterogeneous official and public signals.
@@ -47,4 +51,3 @@ The prototype focuses on the moment a judge can understand quickly: a citizen fl
 - percentage of high-impact incidents receiving human review
 - source freshness, latency, and availability
 - analyst time saved per shift
-

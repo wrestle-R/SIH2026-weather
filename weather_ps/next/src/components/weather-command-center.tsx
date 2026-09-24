@@ -18,6 +18,7 @@ import {
   IndianRupee,
   Languages,
   Layers3,
+  LoaderCircle,
   Map as MapIcon,
   Menu,
   MessageSquareWarning,
@@ -37,6 +38,18 @@ import {
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { IndiaWeatherMap } from "@/components/india-weather-map";
 import { ReportsTrendChart } from "@/components/reports-trend-chart";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useDashboardLanguage } from "@/hooks/use-dashboard-language";
+import { languages } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 import {
   hazardColors,
   reviewItems,
@@ -72,12 +85,16 @@ export function WeatherCommandCenter() {
   const [search, setSearch] = useState("");
   const [isLive, setIsLive] = useState(true);
   const [currentTime, setCurrentTime] = useState("--:--:--");
-  const [dayMode, setDayMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [reviewStatus, setReviewStatus] = useState<Record<string, "verified" | "flagged">>({});
   const [connectedSources, setConnectedSources] = useState<Set<string>>(
     () => new Set(sources.map((source) => source.name)),
   );
+  const { language, changeLanguage, isTranslating, provider, t } =
+    useDashboardLanguage();
+  const activeLanguage =
+    languages.find((item) => item.code === language) ?? languages[0];
 
   useEffect(() => {
     const updateTime = () =>
@@ -97,18 +114,23 @@ export function WeatherCommandCenter() {
     return () => window.clearInterval(timer);
   }, [isLive]);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    return () => document.documentElement.classList.remove("dark");
+  }, [darkMode]);
+
   const filteredEvents = useMemo(() => {
     const query = search.trim().toLowerCase();
     return weatherEvents.filter((event) => {
       const matchesHazard = activeHazard === "All" || event.type === activeHazard;
       const matchesSearch =
         !query ||
-        `${event.type} ${event.city} ${event.state} ${event.source}`
+        `${event.type} ${t(event.type)} ${event.city} ${event.state} ${event.source}`
           .toLowerCase()
           .includes(query);
       return matchesHazard && matchesSearch;
     });
-  }, [activeHazard, search]);
+  }, [activeHazard, search, t]);
 
   const selectedEvent =
     filteredEvents.find((event) => event.id === selectedId) ??
@@ -126,7 +148,7 @@ export function WeatherCommandCenter() {
   }
 
   return (
-    <div className={`app-frame ${dayMode ? "day-mode" : ""}`}>
+    <div className={cn("app-frame", darkMode && "dark-mode")}>
       <aside className={`sidebar ${mobileNavOpen ? "mobile-open" : ""}`}>
         <div className="brand-lockup">
           <div className="brand-mark" aria-hidden="true">
@@ -136,17 +158,17 @@ export function WeatherCommandCenter() {
           </div>
           <div>
             <strong>VARUNETRA</strong>
-            <small>National weather intelligence</small>
+            <small>{t("National weather intelligence")}</small>
           </div>
         </div>
 
         <div className="sih-chip">
           <span>SIH 2026</span>
-          <em>Prototype</em>
+          <em>{t("Prototype")}</em>
         </div>
 
         <nav className="primary-nav" aria-label="Primary navigation">
-          <p className="nav-label">Operations</p>
+          <p className="nav-label">{t("Operations")}</p>
           {navItems.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -160,31 +182,31 @@ export function WeatherCommandCenter() {
                 }}
               >
                 <Icon size={17} />
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
                 {item.target === "verification" ? <b>3</b> : null}
               </button>
             );
           })}
-          <p className="nav-label nav-label-spaced">System</p>
+          <p className="nav-label nav-label-spaced">{t("System")}</p>
           <button type="button" onClick={() => scrollToSection("pipeline")}>
             <ServerCog size={17} />
-            <span>Pipeline health</span>
+            <span>{t("Pipeline health")}</span>
           </button>
           <button type="button" onClick={() => scrollToSection("sources")}>
             <Users size={17} />
-            <span>Response teams</span>
+            <span>{t("Response teams")}</span>
           </button>
         </nav>
 
         <div className="sidebar-status">
           <div className="status-orbit"><Activity size={18} /></div>
           <div>
-            <strong>All systems nominal</strong>
-            <span>8.4k events/min processed</span>
+            <strong>{t("All systems nominal")}</strong>
+            <span>8.4k {t("events/min processed")}</span>
           </div>
         </div>
         <div className="sidebar-footer">
-          <span>Prototype data</span>
+          <span>{t("Prototype data")}</span>
           <span>v0.9.4</span>
         </div>
       </aside>
@@ -211,32 +233,69 @@ export function WeatherCommandCenter() {
             </button>
             <div className="coverage-chip">
               <span className="live-dot" />
-              India national coverage
+              {t("India national coverage")}
             </div>
             <span className="topbar-separator" />
             <span className="topbar-date">24 Sep 2026</span>
           </div>
           <div className="topbar-actions">
-            <button className="icon-button" type="button" aria-label="Change language">
-              <Languages size={17} />
-              <span>EN</span>
-              <ChevronDown size={13} />
-            </button>
-            <button
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="default"
+                    className="icon-button language-button"
+                    aria-label={t("Change language")}
+                    aria-busy={isTranslating}
+                  />
+                }
+              >
+                {isTranslating ? (
+                  <LoaderCircle data-icon="inline-start" className="translation-spinner" />
+                ) : (
+                  <Languages data-icon="inline-start" />
+                )}
+                <span>{activeLanguage.code.toUpperCase()}</span>
+                <ChevronDown data-icon="inline-end" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="language-menu">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>{t("Language")}</DropdownMenuLabel>
+                  {languages.map((item) => (
+                    <DropdownMenuItem
+                      key={item.code}
+                      onClick={() => void changeLanguage(item.code)}
+                    >
+                      <span className="language-code">{item.code.toUpperCase()}</span>
+                      <span>{item.nativeLabel}</span>
+                      {language === item.code ? <Check className="language-check" /> : null}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+                <div className="translation-credit">
+                  {provider === "google-cloud"
+                    ? t("Translation powered by Google Cloud")
+                    : "Google Cloud Translation API"}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="outline"
+              size="icon"
               className="icon-button square-button"
-              type="button"
-              aria-label={dayMode ? "Use dark mode" : "Use light mode"}
-              onClick={() => setDayMode((value) => !value)}
+              aria-label={darkMode ? t("Use light mode") : t("Use dark mode")}
+              onClick={() => setDarkMode((value) => !value)}
             >
-              {dayMode ? <Moon size={17} /> : <Sun size={17} />}
-            </button>
-            <button className="icon-button square-button notification-button" type="button" aria-label="Notifications">
-              <Bell size={17} />
+              {darkMode ? <Sun /> : <Moon />}
+            </Button>
+            <Button variant="outline" size="icon" className="icon-button square-button notification-button" aria-label="Notifications">
+              <Bell />
               <i />
-            </button>
+            </Button>
             <div className="operator">
               <span>AK</span>
-              <div><strong>Admin console</strong><small>National desk</small></div>
+              <div><strong>{t("Admin console")}</strong><small>{t("National desk")}</small></div>
             </div>
           </div>
         </header>
@@ -244,15 +303,15 @@ export function WeatherCommandCenter() {
         <div className="dashboard-content">
           <section className="hero-row" id="overview">
             <div>
-              <p className="eyebrow"><Radio size={13} /> Live intelligence / राष्ट्रीय मौसम</p>
-              <h1>India weather<br /><span>command center.</span></h1>
+              <p className="eyebrow"><Radio size={13} /> {t("Live intelligence")} / राष्ट्रीय मौसम</p>
+              <h1>{t("India weather")}<br /><span>{t("command center.")}</span></h1>
               <p className="hero-copy">
-                Multi-source signals, machine-verified into one operational picture.
+                {t("Multi-source signals, machine-verified into one operational picture.")}
               </p>
             </div>
             <div className="live-control">
               <div>
-                <span>IST operational clock</span>
+                <span>{t("IST operational clock")}</span>
                 <strong>{currentTime}</strong>
               </div>
               <button
@@ -260,7 +319,7 @@ export function WeatherCommandCenter() {
                 className={isLive ? "is-active" : ""}
                 onClick={() => setIsLive((value) => !value)}
               >
-                <Radio size={15} /> {isLive ? "Live" : "Paused"}
+                <Radio size={15} /> {isLive ? t("Live") : t("Paused")}
               </button>
             </div>
           </section>
@@ -268,7 +327,7 @@ export function WeatherCommandCenter() {
           <section className="metrics-grid" aria-label="Operational metrics">
             <article className="metric-card primary-metric">
               <div className="metric-top">
-                <span>Active weather events</span>
+                <span>{t("Active weather events")}</span>
                 <div className="metric-icon"><CloudLightning size={19} /></div>
               </div>
               <div className="metric-value"><strong>47</strong><em>+8 in 1h</em></div>
@@ -279,31 +338,31 @@ export function WeatherCommandCenter() {
               </div>
             </article>
             <article className="metric-card">
-              <div className="metric-top"><span>Reports processed</span><div className="metric-icon cyan"><Layers3 size={19} /></div></div>
+              <div className="metric-top"><span>{t("Reports processed")}</span><div className="metric-icon cyan"><Layers3 size={19} /></div></div>
               <div className="metric-value"><strong>128.4k</strong><em className="positive">+14.2%</em></div>
-              <p>Today across 19 active streams</p>
+              <p>{t("Today across 19 active streams")}</p>
             </article>
             <article className="metric-card">
-              <div className="metric-top"><span>AI verified</span><div className="metric-icon green"><ShieldCheck size={19} /></div></div>
-              <div className="metric-value"><strong>91.8%</strong><em className="positive">High trust</em></div>
+              <div className="metric-top"><span>{t("AI verified")}</span><div className="metric-icon green"><ShieldCheck size={19} /></div></div>
+              <div className="metric-value"><strong>91.8%</strong><em className="positive">{t("High trust")}</em></div>
               <div className="confidence-track"><span style={{ width: "91.8%" }} /></div>
             </article>
             <article className="metric-card">
-              <div className="metric-top"><span>Duplicates merged</span><div className="metric-icon amber"><FileSearch size={19} /></div></div>
+              <div className="metric-top"><span>{t("Duplicates merged")}</span><div className="metric-icon amber"><FileSearch size={19} /></div></div>
               <div className="metric-value"><strong>18,721</strong><em>14.6% noise</em></div>
-              <p>Saved an estimated 346 review hours</p>
+              <p>{t("Saved an estimated 346 review hours")}</p>
             </article>
           </section>
 
           <section className="intel-panel" id="live-events">
             <div className="section-header intel-heading">
               <div>
-                <p className="section-kicker">Live intelligence map</p>
-                <h2>Signals becoming evidence</h2>
+                <p className="section-kicker">{t("Live intelligence map")}</p>
+                <h2>{t("Signals becoming evidence")}</h2>
               </div>
               <div className="map-meta">
-                <span><i className="live-dot" /> Auto-refresh 30 sec</span>
-                <button type="button"><Layers3 size={15} /> Layers <ChevronDown size={13} /></button>
+                <span><i className="live-dot" /> {t("Auto-refresh 30 sec")}</span>
+                <button type="button"><Layers3 size={15} /> {t("Layers")} <ChevronDown size={13} /></button>
               </div>
             </div>
 
@@ -319,7 +378,7 @@ export function WeatherCommandCenter() {
                     {filter !== "All" ? (
                       <i style={{ background: hazardColors[filter] }} />
                     ) : null}
-                    {filter}
+                    {t(filter)}
                   </button>
                 ))}
               </div>
@@ -329,7 +388,7 @@ export function WeatherCommandCenter() {
                 <input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Search city or state"
+                  placeholder={t("Search city or state")}
                 />
                 {search ? (
                   <button type="button" aria-label="Clear search" onClick={() => setSearch("")}><X size={14} /></button>
@@ -342,12 +401,13 @@ export function WeatherCommandCenter() {
                 events={filteredEvents}
                 selectedId={selectedEvent.id}
                 onSelect={setSelectedId}
+                t={t}
               />
 
               <aside className="event-inspector" aria-label="Selected event details">
                 <div className="inspector-topline">
                   <span className={`severity-badge ${selectedEvent.severity}`}>
-                    {selectedEvent.severity}
+                    {t(selectedEvent.severity[0].toUpperCase() + selectedEvent.severity.slice(1))}
                   </span>
                   <span>{selectedEvent.id}</span>
                 </div>
@@ -356,7 +416,7 @@ export function WeatherCommandCenter() {
                     {selectedEvent.type === "Flood" ? <Waves size={23} /> : <CloudLightning size={23} />}
                   </div>
                   <div>
-                    <h3>{selectedEvent.type}</h3>
+                    <h3>{t(selectedEvent.type)}</h3>
                     <p>{selectedEvent.city}, {selectedEvent.state}</p>
                   </div>
                 </div>
@@ -367,34 +427,34 @@ export function WeatherCommandCenter() {
                     <span>{selectedEvent.confidence}</span>
                   </div>
                   <div>
-                    <strong>Verification confidence</strong>
-                    <span>{selectedEvent.confidence >= 90 ? "Ready for dissemination" : "Human review advised"}</span>
+                    <strong>{t("Verification confidence")}</strong>
+                    <span>{selectedEvent.confidence >= 90 ? t("Ready for dissemination") : t("Human review advised")}</span>
                   </div>
                 </div>
 
                 <dl className="event-facts">
-                  <div><dt>Detected</dt><dd>{selectedEvent.time}</dd></div>
-                  <div><dt>Coordinates</dt><dd>{selectedEvent.coordinates}</dd></div>
-                  <div><dt>Primary source</dt><dd>{selectedEvent.source}</dd></div>
-                  <div><dt>Cross-check</dt><dd>{selectedEvent.sourceDetail}</dd></div>
+                  <div><dt>{t("Detected")}</dt><dd>{selectedEvent.time}</dd></div>
+                  <div><dt>{t("Coordinates")}</dt><dd>{selectedEvent.coordinates}</dd></div>
+                  <div><dt>{t("Primary source")}</dt><dd>{selectedEvent.source}</dd></div>
+                  <div><dt>{t("Cross-check")}</dt><dd>{selectedEvent.sourceDetail}</dd></div>
                 </dl>
 
                 <div className="evidence-list">
-                  <span>Evidence stack</span>
+                  <span>{t("Evidence stack")}</span>
                   {selectedEvent.evidence.map((evidence) => (
                     <b key={evidence}><Check size={12} /> {evidence}</b>
                   ))}
                 </div>
 
                 <button className="review-event-button" type="button" onClick={() => scrollToSection("verification")}>
-                  Open verification trail <span>→</span>
+                  {t("Open verification trail")} <span>→</span>
                 </button>
               </aside>
             </div>
 
             {filteredEvents.length === 0 ? (
               <div className="empty-map-state">
-                <Search size={22} /> No events match this filter. Try another state or hazard.
+                <Search size={22} /> {t("No events match this filter. Try another state or hazard.")}
               </div>
             ) : null}
 
@@ -407,7 +467,7 @@ export function WeatherCommandCenter() {
                   onClick={() => setSelectedId(event.id)}
                 >
                   <i style={{ background: hazardColors[event.type] }} />
-                  <span><strong>{event.city}</strong><small>{event.type} · {event.time}</small></span>
+                  <span><strong>{event.city}</strong><small>{t(event.type)} · {event.time}</small></span>
                   <em>{event.confidence}%</em>
                 </button>
               ))}
@@ -418,29 +478,29 @@ export function WeatherCommandCenter() {
             <article className="panel trend-panel">
               <div className="section-header">
                 <div>
-                  <p className="section-kicker">12-hour signal volume</p>
-                  <h2>Reports vs. verified events</h2>
+                  <p className="section-kicker">{t("12-hour signal volume")}</p>
+                  <h2>{t("Reports vs. verified events")}</h2>
                 </div>
-                <div className="chart-legend"><span className="reports">Reports</span><span className="verified">Verified</span></div>
+                <div className="chart-legend"><span className="reports">{t("Reports")}</span><span className="verified">{t("Verified")}</span></div>
               </div>
               <div className="trend-summary">
                 <strong>1,284</strong>
-                <span><b>+18.2%</b> compared with prior 12h</span>
+                <span><b>+18.2%</b> {t("compared with prior 12h")}</span>
               </div>
               <div className="chart-wrap"><ReportsTrendChart /></div>
             </article>
 
             <article className="panel pipeline-panel" id="pipeline">
               <div className="section-header">
-                <div><p className="section-kicker">Processing pipeline</p><h2>From noise to trust</h2></div>
+                <div><p className="section-kicker">{t("Processing pipeline")}</p><h2>{t("From noise to trust")}</h2></div>
                 <span className="latency"><Zap size={12} /> 1.8s p95</span>
               </div>
               <div className="pipeline-flow">
                 {[
-                  { icon: Radio, value: "128.4k", label: "Ingested", note: "19 streams" },
-                  { icon: Layers3, value: "109.7k", label: "Deduplicated", note: "−14.6% noise" },
-                  { icon: Bot, value: "100.7k", label: "AI scored", note: "7 signals/report" },
-                  { icon: ShieldCheck, value: "92.4k", label: "Verified", note: "91.8% trusted" },
+                  { icon: Radio, value: "128.4k", label: t("Ingested"), note: `19 ${t("streams")}` },
+                  { icon: Layers3, value: "109.7k", label: t("Deduplicated"), note: `−14.6% ${t("noise")}` },
+                  { icon: Bot, value: "100.7k", label: t("AI scored"), note: `7 ${t("signals/report")}` },
+                  { icon: ShieldCheck, value: "92.4k", label: t("Verified"), note: `91.8% ${t("trusted")}` },
                 ].map((step, index) => {
                   const Icon = step.icon;
                   return (
@@ -456,7 +516,7 @@ export function WeatherCommandCenter() {
               </div>
               <div className="pipeline-note">
                 <Sparkles size={15} />
-                <span><strong>Explainable verification</strong> scores source history, spatio-temporal agreement, media authenticity, and trusted sensor proximity.</span>
+                <span><strong>{t("Explainable verification")}</strong> {t("scores source history, spatio-temporal agreement, media authenticity, and trusted sensor proximity.")}</span>
               </div>
             </article>
           </section>
@@ -464,15 +524,15 @@ export function WeatherCommandCenter() {
           <section className="lower-grid">
             <article className="panel review-panel" id="verification">
               <div className="section-header">
-                <div><p className="section-kicker">Human-in-the-loop</p><h2>Verification queue</h2></div>
-                <button className="text-button" type="button"><Filter size={14} /> Priority first</button>
+                <div><p className="section-kicker">{t("Human-in-the-loop")}</p><h2>{t("Verification queue")}</h2></div>
+                <button className="text-button" type="button"><Filter size={14} /> {t("Priority first")}</button>
               </div>
               <div className="review-list">
                 {reviewItems.map((item) => {
                   const status = reviewStatus[item.id];
                   return (
                     <div className={`review-item ${status ? `resolved ${status}` : ""}`} key={item.id}>
-                      <div className="review-score"><span>{item.score}</span><small>trust</small></div>
+                      <div className="review-score"><span>{item.score}</span><small>{t("trust")}</small></div>
                       <div className="review-body">
                         <div className="review-meta"><span>{item.id}</span><span>{item.location}</span></div>
                         <p>{item.text}</p>
@@ -484,7 +544,7 @@ export function WeatherCommandCenter() {
                       {status ? (
                         <div className="review-result">
                           {status === "verified" ? <CheckCircle2 size={18} /> : <Flag size={18} />}
-                          {status}
+                          {t(status)}
                         </div>
                       ) : (
                         <div className="review-actions">
@@ -500,8 +560,8 @@ export function WeatherCommandCenter() {
 
             <article className="panel source-panel" id="sources">
               <div className="section-header">
-                <div><p className="section-kicker">Source registry</p><h2>Connected data fabric</h2></div>
-                <span className="source-count">{connectedSources.size}/5 online</span>
+                <div><p className="section-kicker">{t("Source registry")}</p><h2>{t("Connected data fabric")}</h2></div>
+                <span className="source-count">{connectedSources.size}/5 {t("online")}</span>
               </div>
               <div className="source-list">
                 {sources.map((source) => {
@@ -513,28 +573,28 @@ export function WeatherCommandCenter() {
                       </div>
                       <span><strong>{source.name}</strong><small>{source.detail}</small></span>
                       <em className={connected ? "connected" : "disconnected"}>
-                        <i /> {connected ? `${source.health}%` : "Paused"}
+                        <i /> {connected ? `${source.health}%` : t("Paused")}
                       </em>
                     </button>
                   );
                 })}
               </div>
               <div className="source-footer">
-                <RefreshCw size={13} /> Last schema sync 42 sec ago
+                <RefreshCw size={13} /> {t("Last schema sync 42 sec ago")}
               </div>
             </article>
           </section>
 
           <section className="impact-strip">
-            <div><CircleGauge size={21} /><span><strong>22 min faster</strong><small>incident confirmation</small></span></div>
-            <div><MessageSquareWarning size={21} /><span><strong>6× less noise</strong><small>for district operators</small></span></div>
-            <div><IndianRupee size={21} /><span><strong>Lower response cost</strong><small>through one shared picture</small></span></div>
-            <div className="impact-cta"><MapIcon size={18} /><span>Built for India’s scale.<br /><b>Designed for decisive action.</b></span></div>
+            <div><CircleGauge size={21} /><span><strong>22 min faster</strong><small>{t("incident confirmation")}</small></span></div>
+            <div><MessageSquareWarning size={21} /><span><strong>6× {t("less noise")}</strong><small>{t("for district operators")}</small></span></div>
+            <div><IndianRupee size={21} /><span><strong>{t("Lower response cost")}</strong><small>{t("through one shared picture")}</small></span></div>
+            <div className="impact-cta"><MapIcon size={18} /><span>{t("Built for India’s scale.")}<br /><b>{t("Designed for decisive action.")}</b></span></div>
           </section>
 
           <footer className="dashboard-footer">
-            <span>VARUNETRA · SIH 2026 functional prototype</span>
-            <span>Demo records are simulated · Production integrations require agency approval</span>
+            <span>VARUNETRA · SIH 2026 {t("functional prototype")}</span>
+            <span>{t("Demo records are simulated · Production integrations require agency approval")}</span>
           </footer>
         </div>
       </main>

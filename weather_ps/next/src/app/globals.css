@@ -84,6 +84,26 @@
   --radius: 0.5rem;
 }
 
+.dark {
+  --background: #081d2a;
+  --foreground: #edf5f3;
+  --card: #0d2938;
+  --card-foreground: #edf5f3;
+  --popover: #102d3d;
+  --popover-foreground: #edf5f3;
+  --primary: #8fd8df;
+  --primary-foreground: #06202d;
+  --secondary: #193746;
+  --secondary-foreground: #dcebea;
+  --muted: #173342;
+  --muted-foreground: #91aab1;
+  --accent: #1c4050;
+  --accent-foreground: #f3f8f7;
+  --border: #2a4857;
+  --input: #31515f;
+  --ring: #49bdca;
+}
+
 * { box-sizing: border-box; border-color: var(--border); }
 html { scroll-behavior: smooth; background: #071d2c; }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-body), sans-serif; }
@@ -104,7 +124,62 @@ button:focus-visible, input:focus-visible, [role="button"]:focus-visible { outli
   color: var(--ink);
   transition: background 250ms ease, color 250ms ease;
 }
-.app-frame.day-mode { --shell-bg: #f1f0e9; --panel-bg: #fffdf6; --panel-alt: #f4f2ea; --hairline: #d8d8d0; }
+.app-frame.dark-mode {
+  --shell-bg: #061923;
+  --panel-bg: #0d2938;
+  --panel-alt: #123343;
+  --ink: #edf5f3;
+  --muted-ink: #98aeb4;
+  --hairline: #284654;
+  --chart-foreground: #d7e6e6;
+  --chart-foreground-muted: #79949d;
+  --chart-line-primary: #36bbca;
+  --chart-line-secondary: #516d78;
+  --chart-crosshair: #f1845e;
+  --chart-grid: rgba(150, 199, 204, 0.13);
+  --chart-marker-background: #102f40;
+  --chart-marker-foreground: #edf5f3;
+  background: radial-gradient(circle at 82% -15%, rgba(22, 139, 156, 0.17), transparent 34rem), var(--shell-bg);
+}
+
+.dark-mode .topbar { background: color-mix(in srgb, var(--shell-bg) 90%, transparent); }
+.dark-mode .hero-row h1,
+.dark-mode .metric-value strong,
+.dark-mode .section-header h2,
+.dark-mode .event-ticker strong,
+.dark-mode .review-body p,
+.dark-mode .source-list strong { color: var(--ink); }
+.dark-mode .hero-row h1 span,
+.dark-mode .hero-copy,
+.dark-mode .metric-top,
+.dark-mode .metric-card p,
+.dark-mode .coverage-chip,
+.dark-mode .topbar-date,
+.dark-mode .section-kicker,
+.dark-mode .chart-legend,
+.dark-mode .trend-summary span,
+.dark-mode .review-meta,
+.dark-mode .review-tags small,
+.dark-mode .source-list small,
+.dark-mode .source-footer { color: var(--muted-ink); }
+.dark-mode .icon-button,
+.dark-mode .live-control,
+.dark-mode .event-search { color: #c7d8da; background: #0d2938; }
+.dark-mode .metric-icon { color: #ef8b66; background: #3b2d2c; }
+.dark-mode .metric-icon.cyan { color: #51c7d4; background: #153a47; }
+.dark-mode .metric-icon.green { color: #55c8aa; background: #173c38; }
+.dark-mode .metric-icon.amber { color: #e2b64e; background: #403a25; }
+.dark-mode .confidence-track { background: #284855; }
+.dark-mode .hazard-tabs button { color: #9bb0b5; }
+.dark-mode .hazard-tabs button:hover { color: #eef6f4; }
+.dark-mode .event-search input { color: #eaf3f1; }
+.dark-mode .event-ticker button:hover,
+.dark-mode .event-ticker button.active { background: #153747; }
+.dark-mode .pipeline-icon,
+.dark-mode .source-mark { background: #173d49; border-color: #285463; }
+.dark-mode .source-mark.community { background: #3a3325; }
+.dark-mode .review-tags b { color: #a9bfc3; }
+.dark-mode .review-actions button:hover { background: #183a49; }
 
 .sidebar {
   position: fixed;
@@ -156,6 +231,13 @@ button:focus-visible, input:focus-visible, [role="button"]:focus-visible { outli
 .icon-button { height: 34px; gap: 6px; padding: 0 10px; color: #47616b; background: rgba(255, 255, 255, 0.25); border: 1px solid var(--hairline); border-radius: 3px; font-size: 10px; }
 .icon-button:hover { background: var(--panel-bg); color: var(--ink); }
 .square-button { width: 34px; justify-content: center; padding: 0; }
+.language-button { min-width: 70px; }
+.language-menu { min-width: 190px; }
+.language-code { display: inline-grid; width: 26px; color: var(--muted-foreground); font-family: var(--font-mono), monospace; font-size: 9px; }
+.language-check { margin-left: auto; }
+.translation-credit { margin: 4px -4px -4px; padding: 8px 10px; color: var(--muted-foreground); background: var(--muted); border-top: 1px solid var(--border); font-family: var(--font-mono), monospace; font-size: 7px; letter-spacing: 0.04em; text-transform: uppercase; }
+.translation-spinner { animation: translation-spin 900ms linear infinite; }
+@keyframes translation-spin { to { transform: rotate(360deg); } }
 .notification-button { position: relative; }
 .notification-button i { position: absolute; top: 7px; right: 7px; width: 5px; height: 5px; background: #e46643; border: 1px solid var(--panel-bg); border-radius: 50%; }
 .operator { gap: 9px; margin-left: 8px; padding-left: 16px; border-left: 1px solid var(--hairline); }

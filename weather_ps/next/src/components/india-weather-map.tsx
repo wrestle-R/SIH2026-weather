@@ -7,12 +7,14 @@ type IndiaWeatherMapProps = {
   events: WeatherEvent[];
   selectedId: string;
   onSelect: (id: string) => void;
+  t: (text: string) => string;
 };
 
 export function IndiaWeatherMap({
   events,
   selectedId,
   onSelect,
+  t,
 }: IndiaWeatherMapProps) {
   return (
     <div className="map-shell">
@@ -88,7 +90,7 @@ export function IndiaWeatherMap({
               key={event.id}
               role="button"
               tabIndex={0}
-              aria-label={`${event.type} in ${event.city}, ${event.confidence}% verified`}
+              aria-label={`${t(event.type)} in ${event.city}, ${event.confidence}% ${t("verified")}`}
               onClick={() => onSelect(event.id)}
               onKeyDown={(keyEvent) => {
                 if (keyEvent.key === "Enter" || keyEvent.key === " ") {
@@ -121,7 +123,7 @@ export function IndiaWeatherMap({
                     {event.city}
                   </text>
                   <text x={x + 23} y={y + 8} fill="#58707d" fontSize="9">
-                    {event.type} · {event.confidence}%
+                    {t(event.type)} · {event.confidence}%
                   </text>
                 </g>
               ) : null}
@@ -132,15 +134,15 @@ export function IndiaWeatherMap({
 
       <div className="map-watermark">
         <Radar size={16} />
-        <span>Multi-layer fusion</span>
+        <span>{t("Multi-layer fusion")}</span>
       </div>
       <div className="map-legend">
-        <span><i className="legend-dot critical" /> Critical</span>
-        <span><i className="legend-dot high" /> High</span>
-        <span><i className="legend-dot moderate" /> Moderate</span>
+        <span><i className="legend-dot critical" /> {t("Critical")}</span>
+        <span><i className="legend-dot high" /> {t("High")}</span>
+        <span><i className="legend-dot moderate" /> {t("Moderate")}</span>
       </div>
       <div className="bay-label">
-        <Waves size={13} /> Bay of Bengal
+        <Waves size={13} /> {t("Bay of Bengal")}
       </div>
     </div>
   );
