@@ -3,7 +3,7 @@
 import { LocateFixed, Minus, Plus, Radar, Waves } from "lucide-react";
 import { useState, type CSSProperties } from "react";
 import { hazardColors, type WeatherEvent } from "@/lib/weather-data";
-import { indiaStatePaths } from "@/lib/india-state-paths";
+import { indiaOutlinePath } from "@/lib/india-outline-path";
 
 function projectEventCoordinates(coordinates: string) {
   const latitude = coordinates.match(/([\d.]+)\s*°?\s*([NS])/i);
@@ -14,8 +14,8 @@ function projectEventCoordinates(coordinates: string) {
   const lat = Number(latitude[1]) * (latitude[2].toUpperCase() === "S" ? -1 : 1);
   const lon = Number(longitude[1]) * (longitude[2].toUpperCase() === "W" ? -1 : 1);
   return {
-    x: 30 + (lon - 67) * 13.3,
-    y: 25 + (37.5 - lat) * 14.1,
+    x: 18 + (lon - 67) * 24,
+    y: 48 + (37.5 - lat) * 21,
   };
 }
 
@@ -54,7 +54,7 @@ export function IndiaWeatherMap({
       <svg
         className="india-map"
         style={{ "--map-zoom": zoom } as CSSProperties}
-        viewBox="0 0 460 500"
+        viewBox="0 0 800 787"
         role="img"
         aria-label="India weather incident map"
       >
@@ -76,28 +76,25 @@ export function IndiaWeatherMap({
         </defs>
 
         <g className="india-outline">
-          {indiaStatePaths.map((path, index) => (
-            <path
-              d={path}
-              fill="url(#indiaFill)"
-              key={index}
-              stroke="#8bd4de"
-              strokeLinejoin="round"
-              strokeOpacity="0.48"
-              strokeWidth="1.15"
-            />
-          ))}
+          <path
+            d={indiaOutlinePath}
+            fill="url(#indiaFill)"
+            stroke="#8bd4de"
+            strokeLinejoin="round"
+            strokeOpacity="0.72"
+            strokeWidth="2.2"
+          />
         </g>
         <path
-          d="M0 0 H460 V500 H0 Z"
+          d="M0 0 H800 V787 H0 Z"
           fill="url(#mapGrid)"
           pointerEvents="none"
         />
 
         {events.map((event) => {
           const point = projectEventCoordinates(event.coordinates);
-          const x = point?.x ?? (event.mapX / 100) * 390 + 20;
-          const y = point?.y ?? (event.mapY / 100) * 430 + 18;
+          const x = point?.x ?? (event.mapX / 100) * 680 + 60;
+          const y = point?.y ?? (event.mapY / 100) * 640 + 55;
           const isSelected = event.id === selectedId;
           const color = hazardColors[event.type];
 
