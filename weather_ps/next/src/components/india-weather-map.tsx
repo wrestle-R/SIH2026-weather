@@ -5,6 +5,17 @@ import { useState, type CSSProperties } from "react";
 import { hazardColors, type WeatherEvent } from "@/lib/weather-data";
 import { indiaOutlinePath } from "@/lib/india-outline-path";
 
+// Bounds and scale used to draw indiaOutlinePath from the source boundary data.
+const INDIA_MAP_PROJECTION = {
+  west: 68.18625,
+  north: 35.50133,
+  pixelsPerDegree: 27.3,
+  left: 1,
+  top: 1,
+  centerX: 400,
+  longitudeScale: 0.88,
+} as const;
+
 function projectEventCoordinates(coordinates: string) {
   const latitude = coordinates.match(/([\d.]+)\s*°?\s*([NS])/i);
   const longitude = coordinates.match(/([\d.]+)\s*°?\s*([EW])/i);
@@ -13,9 +24,12 @@ function projectEventCoordinates(coordinates: string) {
 
   const lat = Number(latitude[1]) * (latitude[2].toUpperCase() === "S" ? -1 : 1);
   const lon = Number(longitude[1]) * (longitude[2].toUpperCase() === "W" ? -1 : 1);
+  const { centerX, left, longitudeScale, north, pixelsPerDegree, top, west } = INDIA_MAP_PROJECTION;
+  const projectedX = left + (lon - west) * pixelsPerDegree;
+
   return {
-    x: 18 + (lon - 67) * 24,
-    y: 48 + (37.5 - lat) * 21,
+    x: centerX + (projectedX - centerX) * longitudeScale,
+    y: top + (north - lat) * pixelsPerDegree,
   };
 }
 
@@ -75,7 +89,10 @@ export function IndiaWeatherMap({
           </filter>
         </defs>
 
-        <g className="india-outline">
+        <g
+          className="india-outline"
+          transform={`translate(${INDIA_MAP_PROJECTION.centerX * (1 - INDIA_MAP_PROJECTION.longitudeScale)} 0) scale(${INDIA_MAP_PROJECTION.longitudeScale} 1)`}
+        >
           <path
             d={indiaOutlinePath}
             fill="url(#indiaFill)"

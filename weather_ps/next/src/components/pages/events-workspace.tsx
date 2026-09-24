@@ -22,10 +22,10 @@ export function EventsWorkspace() {
 
   return (
     <>
-      <PageHeader eyebrow="Real-time operations" title="Live weather events" description="Explore geolocated weather signals, inspect verification evidence and focus the national view by hazard or place." icon={RadioTower} />
+      <PageHeader eyebrow="Live updates" title="Weather reports" description="Find weather reports by place or type, then check the details behind each one." icon={RadioTower} />
       <div className="summary-strip"><span><strong>{events.length}</strong>visible events</span><span><strong>18</strong>states reporting</span><span><strong>94.2%</strong>average confidence</span><span><strong>42 s</strong>ingestion latency</span></div>
       <Card className="event-workspace">
-        <CardHeader className="border-b"><CardTitle>National event monitor</CardTitle><CardDescription>Markers represent clustered and deduplicated reports</CardDescription></CardHeader>
+        <CardHeader className="border-b"><CardTitle>Weather map</CardTitle><CardDescription>Each marker shows a group of matching reports</CardDescription></CardHeader>
         <div className="workspace-filters">
           <label className="search-control"><Search /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search city, state or hazard" aria-label="Search events" /></label>
           <Select value={hazard} onValueChange={(value) => setHazard(value as "All" | EventType)}><SelectTrigger className="filter-select"><SelectValue /></SelectTrigger><SelectContent>{["All", "Flood", "Heavy rain", "Thunderstorm", "Heatwave", "Fog", "Strong wind"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>

@@ -76,15 +76,15 @@ export function LabWorkspace() {
 
   return (
     <div className="page lab-page">
-      <div className="modern-page-header"><div><Badge variant="secondary"><FlaskConical data-icon="inline-start" /> Hands-on workspace</Badge><h1>Parser Lab</h1><p>Upload a device log or paste raw evidence. ULPF detects the format, normalizes it, and keeps every original byte.</p></div></div>
+      <div className="modern-page-header"><div><Badge variant="secondary"><FlaskConical data-icon="inline-start" /> Try it yourself</Badge><h1>Try a log</h1><p>Upload a device log or paste it here. ULPF finds its format, makes a clear record, and keeps the original log.</p></div></div>
 
       <div className="lab-layout">
         <div className="lab-input-column">
           <Card>
-            <CardHeader><div><CardTitle>Upload log evidence</CardTitle><CardDescription>Best for proving byte-for-byte preservation.</CardDescription></div><Badge variant="outline">Max 1 MB</Badge></CardHeader>
+            <CardHeader><div><CardTitle>Upload a log</CardTitle><CardDescription>Use a file to keep and check the exact original bytes.</CardDescription></div><Badge variant="outline">Max 1 MB</Badge></CardHeader>
             <CardContent>
               <button className={dragging ? "upload-zone dragging" : "upload-zone"} onClick={() => uploadRef.current?.click()} onDragOver={event => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={event => { event.preventDefault(); setDragging(false); const file = event.dataTransfer.files[0]; if (file) void upload(file); }}>
-                <span className="upload-icon"><UploadCloud /></span><b>{busy ? "Processing evidence…" : "Drop a log file here"}</b><small>or click to choose .log, .txt, .json, .xml, or .csv</small><span className="choose-file">Choose file</span>
+                <span className="upload-icon"><UploadCloud /></span><b>{busy ? "Reading log…" : "Drop a log file here"}</b><small>or choose .log, .txt, .json, .xml, or .csv</small><span className="choose-file">Choose file</span>
               </button>
               <input ref={uploadRef} hidden type="file" accept=".log,.txt,.json,.xml,.csv" onChange={event => { const file = event.target.files?.[0]; if (file) void upload(file); }} />
             </CardContent>

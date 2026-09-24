@@ -8,11 +8,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const NAV = [
   { href: "/", label: "Overview", icon: Activity },
-  { href: "/demo", label: "Live demo", icon: Play },
-  { href: "/lab", label: "Parser lab", icon: FlaskConical },
-  { href: "/events", label: "Events", icon: ListFilter },
-  { href: "/sources", label: "Sources", icon: GitBranch },
-  { href: "/schema", label: "Schema", icon: Database },
+  { href: "/demo", label: "See it work", icon: Play },
+  { href: "/lab", label: "Try a log", icon: FlaskConical },
+  { href: "/events", label: "Processed logs", icon: ListFilter },
+  { href: "/sources", label: "Add a source", icon: GitBranch },
+  { href: "/schema", label: "Field guide", icon: Database },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="sidebar">
         <Link href="/" className="brand" aria-label="ULPF overview">
           <span className="brand-mark"><ShieldCheck size={21} strokeWidth={2.4} /></span>
-          <span><b>ULPF</b><small>SIH 2026 · PS 26156</small></span>
+          <span><b>ULPF</b><small>Security logs made clear</small></span>
         </Link>
         <nav className="side-nav" aria-label="Primary navigation">
           {NAV.map(({ href, label, icon: Icon }) => {
@@ -38,14 +38,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <div className="sidebar-foot">
-          <div className="runtime-card"><span className="status-line"><i /> Runtime ready</span><small>Local processing · no cloud</small></div>
-          <Link href="/schema" className="docs-link"><BookOpen size={15} /> OCSF 1.9 schema</Link>
+          <div className="runtime-card"><span className="status-line"><i /> Ready to use</span><small>Runs on this computer · no cloud</small></div>
+          <Link href="/schema" className="docs-link"><BookOpen size={15} /> OCSF field guide</Link>
         </div>
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <div><span className="topbar-eyebrow">Universal Log Pre-processing Framework</span><b className="topbar-title">Security data, made interoperable</b></div>
-          <Badge variant="outline" className="topbar-status"><i /> Offline ready</Badge>
+          <div><span className="topbar-eyebrow">Universal Log Pre-processing Framework</span><b className="topbar-title">Different logs, one clear format</b></div>
+          <Badge variant="outline" className="topbar-status"><i /> Works offline</Badge>
         </header>
         <main id="main-content">{children}</main>
       </div>

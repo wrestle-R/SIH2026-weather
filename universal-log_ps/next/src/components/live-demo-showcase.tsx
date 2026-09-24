@@ -56,8 +56,8 @@ export function LiveDemoShowcase() {
   return (
     <div className="page demo-page">
       <div className="modern-page-header">
-        <div><Badge variant="secondary"><Sparkles data-icon="inline-start" /> Automatic showcase</Badge><h1>Watch one log become actionable.</h1><p>No clicks required. ULPF is processing real fixture data through the same API used by the Parser Lab.</p></div>
-        <div className="header-actions"><Button variant="outline" onClick={() => setPlaying(value => !value)}>{playing ? <CirclePause data-icon="inline-start" /> : <CirclePlay data-icon="inline-start" />}{playing ? "Pause" : "Resume"}</Button><Link className={buttonVariants()} href="/lab"><FlaskConical data-icon="inline-start" /> Try your own log</Link></div>
+        <div><Badge variant="secondary"><Sparkles data-icon="inline-start" /> Automatic demo</Badge><h1>See one log become clear.</h1><p>No clicks needed. ULPF processes real example data using the same system as Try a log.</p></div>
+        <div className="header-actions"><Button variant="outline" onClick={() => setPlaying(value => !value)}>{playing ? <CirclePause data-icon="inline-start" /> : <CirclePlay data-icon="inline-start" />}{playing ? "Pause" : "Resume"}</Button><Link className={buttonVariants()} href="/lab"><FlaskConical data-icon="inline-start" /> Try a log</Link></div>
       </div>
 
       <Card className="showcase-card">
@@ -72,7 +72,7 @@ export function LiveDemoShowcase() {
           <Progress value={((stage + 1) / STAGES.length) * 100} className="showcase-progress" />
           {error ? <Alert variant="destructive"><AlertTitle>Demo interrupted</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
           <div className="transformation-grid">
-            <section className="raw-pane"><div className="pane-heading"><span><FileInput /> Original evidence</span><Badge variant="outline">{event?.evidence.byteLength ?? new TextEncoder().encode(sample.content).length} bytes</Badge></div><pre>{sample.content}</pre><footer>Preserved byte-for-byte before parsing</footer></section>
+            <section className="raw-pane"><div className="pane-heading"><span><FileInput /> Original log</span><Badge variant="outline">{event?.evidence.byteLength ?? new TextEncoder().encode(sample.content).length} bytes</Badge></div><pre>{sample.content}</pre><footer>Saved exactly as received before reading it</footer></section>
             <div className="transform-arrow"><WandSparkles /><ArrowRight /></div>
             <section className="normalized-pane"><div className="pane-heading"><span><ShieldCheck /> OCSF 1.9 record</span>{batch ? <Badge className="success-badge">{Math.round(batch.detectionConfidence * 100)}% detected</Badge> : <Badge variant="secondary">Processing…</Badge>}</div>
               {event && stage >= 2 ? <dl className="normalized-fields"><div><dt>Class</dt><dd>{event.ocsf.class_name}</dd></div><div><dt>Message</dt><dd>{event.ocsf.message}</dd></div><div><dt>Source</dt><dd>{event.ocsf.src_endpoint?.ip ?? "—"}:{event.ocsf.src_endpoint?.port ?? "—"}</dd></div><div><dt>Destination</dt><dd>{event.ocsf.dst_endpoint?.ip ?? "—"}:{event.ocsf.dst_endpoint?.port ?? "—"}</dd></div><div><dt>Action</dt><dd>{event.ocsf.action ?? event.ocsf.status}</dd></div><div><dt>Severity</dt><dd>{event.ocsf.severity}</dd></div></dl> : <div className="normalizing-placeholder"><RefreshCw className="spin" /><span>Detecting format and mapping fields…</span></div>}
@@ -83,7 +83,7 @@ export function LiveDemoShowcase() {
       </Card>
 
       <div className="sample-switcher" aria-label="Showcase samples">{samples.map((item,index) => <button className={index === sampleIndex ? "active" : ""} key={item.id} onClick={() => { setSampleIndex(index); setPlaying(false); }}><span>{String(index + 1).padStart(2,"0")}</span><div><b>{item.vendor}</b><small>{item.format.toUpperCase()}</small></div></button>)}</div>
-      <Alert className="demo-note"><ShieldCheck /><AlertTitle>What this proves</AlertTitle><AlertDescription>Format detection, parsing, OCSF normalization, field lineage, and SHA-256 integrity all run locally. Continue to Parser Lab to upload your own file and inspect every output view.</AlertDescription></Alert>
+          <Alert className="demo-note"><ShieldCheck /><AlertTitle>What this shows</AlertTitle><AlertDescription>Finding the format, reading it, creating OCSF fields, showing where fields came from, and SHA-256 checks all run locally. Go to Try a log to upload your own file and see every result view.</AlertDescription></Alert>
     </div>
   );
 }

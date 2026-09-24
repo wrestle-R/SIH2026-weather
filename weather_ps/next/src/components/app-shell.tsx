@@ -35,26 +35,26 @@ import { languages } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const operations = [
-  { href: "/", label: "Command overview", icon: LayoutDashboard },
-  { href: "/events", label: "Live event stream", icon: RadioTower },
-  { href: "/verification", label: "Verification queue", icon: ShieldCheck, count: 3 },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/", label: "Overview", icon: LayoutDashboard },
+  { href: "/events", label: "Live weather updates", icon: RadioTower },
+  { href: "/verification", label: "Reports to check", icon: ShieldCheck, count: 3 },
+  { href: "/analytics", label: "Trends", icon: BarChart3 },
   { href: "/alerts", label: "Alerts", icon: Siren, count: 2 },
 ] as const;
 
 const system = [
-  { href: "/sources", label: "Source registry", icon: Database },
-  { href: "/pipeline", label: "Pipeline health", icon: Workflow },
+  { href: "/sources", label: "Data sources", icon: Database },
+  { href: "/pipeline", label: "System status", icon: Workflow },
 ] as const;
 
 const pageNames: Record<string, string> = {
-  "/": "Command overview",
-  "/events": "Live event stream",
-  "/verification": "Verification queue",
-  "/analytics": "Analytics",
+  "/": "Overview",
+  "/events": "Live weather updates",
+  "/verification": "Reports to check",
+  "/analytics": "Trends",
   "/alerts": "Alerts",
-  "/sources": "Source registry",
-  "/pipeline": "Pipeline health",
+  "/sources": "Data sources",
+  "/pipeline": "System status",
 };
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -98,7 +98,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="brand-mark" aria-hidden="true"><span /><span /><span /></div>
           <div>
             <strong>VARUNETRA</strong>
-            <small>{t("National weather intelligence")}</small>
+            <small>{t("National weather updates")}</small>
           </div>
         </Link>
 
@@ -112,11 +112,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="sidebar-status">
           <div className="status-orbit"><Activity size={18} /></div>
           <div>
-            <strong>{t("All systems nominal")}</strong>
-            <span>8.4k {t("events/min processed")}</span>
+            <strong>{t("Systems working normally")}</strong>
+            <span>8.4k {t("reports checked each minute")}</span>
           </div>
         </div>
-        <div className="sidebar-footer"><span>National operations grid</span><span>v1.0</span></div>
+        <div className="sidebar-footer"><span>National weather desk</span><span>v1.0</span></div>
       </aside>
 
       {mobileNavOpen ? (
@@ -127,7 +127,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="topbar">
           <div className="topbar-left">
             <button className="mobile-menu" type="button" aria-label="Open navigation" onClick={() => setMobileNavOpen(true)}><Menu size={20} /></button>
-            <div className="coverage-chip"><span className="live-dot" />{t("India national coverage")}</div>
+            <div className="coverage-chip"><span className="live-dot" />{t("Weather updates across India")}</div>
             <span className="topbar-separator" />
             <span className="topbar-date">{t(pageNames[pathname] ?? "Weather intelligence")}</span>
           </div>
@@ -162,7 +162,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
         <main id="main-content" className="dashboard-content">
           {children}
-          <footer className="shell-footer"><span>VARUNETRA · National Weather Intelligence</span><span>Decision support only · Official warnings remain authoritative</span></footer>
+          <footer className="shell-footer"><span>VARUNETRA · National Weather Updates</span><span>Support tool only · Follow official warnings</span></footer>
         </main>
       </div>
     </div>

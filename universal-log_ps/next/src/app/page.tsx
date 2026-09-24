@@ -20,12 +20,12 @@ export default function CommandPage() {
         <div className="hero-copy">
           <Badge variant="outline" className="hero-badge"><span className="live-dot" /> SIH 2026 working prototype</Badge>
           <h1>Every log.<br /><span>One language.</span></h1>
-          <p>ULPF turns fragmented perimeter-device logs into lossless, traceable OCSF records—ready for SIEMs, data lakes, and investigations.</p>
+          <p>ULPF turns different security-device logs into one clear OCSF format while keeping the original log safe for later checks.</p>
           <div className="hero-actions">
-            <Link className={buttonVariants({ size: "lg" })} href="/demo"><Play data-icon="inline-start" fill="currentColor" /> Watch live demo</Link>
-            <Link className={buttonVariants({ size: "lg", variant: "outline" })} href="/lab"><FlaskConical data-icon="inline-start" /> Open parser lab</Link>
+            <Link className={buttonVariants({ size: "lg" })} href="/demo"><Play data-icon="inline-start" fill="currentColor" /> See it work</Link>
+            <Link className={buttonVariants({ size: "lg", variant: "outline" })} href="/lab"><FlaskConical data-icon="inline-start" /> Try a log</Link>
           </div>
-          <div className="hero-proof"><span><Check /> Exact bytes preserved</span><span><Check /> Runs offline</span><span><Check /> OCSF 1.9</span></div>
+          <div className="hero-proof"><span><Check /> Original log kept</span><span><Check /> Works offline</span><span><Check /> OCSF 1.9</span></div>
         </div>
         <Card className="hero-console">
           <CardHeader><div><CardTitle>Live transformation</CardTitle><CardDescription>FortiGate · key-value traffic log</CardDescription></div><Badge className="success-badge">Verified</Badge></CardHeader>
@@ -43,9 +43,9 @@ export default function CommandPage() {
 
       <div className="overview-grid">
         <Card>
-          <CardHeader><div><CardTitle>How ULPF processes an event</CardTitle><CardDescription>One deterministic path from raw evidence to analytics-ready records.</CardDescription></div><Badge variant="secondary">Local pipeline</Badge></CardHeader>
+          <CardHeader><div><CardTitle>How ULPF handles a log</CardTitle><CardDescription>A clear path from the original log to a record you can use.</CardDescription></div><Badge variant="secondary">Runs locally</Badge></CardHeader>
           <CardContent className="process-list">
-            {["Seal raw bytes", "Detect & parse", "Map to OCSF", "Attach lineage", "Verify integrity"].map((step,index) => <div className="process-step" key={step}><span>{index+1}</span><div><b>{step}</b><small>{["Base64 evidence + SHA-256", "Format confidence and warnings", "Network Activity or Detection Finding", "Every value points to its source", "Tamper-evident hash chain"][index]}</small></div>{index < 4 ? <ArrowRight /> : <Check />}</div>)}
+            {["Save original log", "Find and read format", "Convert to OCSF", "Show where values came from", "Check for changes"].map((step,index) => <div className="process-step" key={step}><span>{index+1}</span><div><b>{step}</b><small>{["Original data + SHA-256 check", "Format score and any warnings", "Network Activity or Detection Finding", "Every value links back to the log", "Saved hash check"][index]}</small></div>{index < 4 ? <ArrowRight /> : <Check />}</div>)}
           </CardContent>
         </Card>
         <Card>
