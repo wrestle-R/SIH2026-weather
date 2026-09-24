@@ -1,0 +1,5 @@
+node_modules
+.next
+coverage
+playwright-report
+npm-debug.log
