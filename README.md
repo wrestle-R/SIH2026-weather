@@ -38,7 +38,7 @@ The current web prototype includes:
 - Responsive desktop, tablet, and mobile layouts.
 - English, Hindi, and Marathi interface options.
 
-**Demo data notice:** Reports, metrics, and source activity currently use deterministic simulated data. The prototype demonstrates the intended workflows; it does not yet connect to live weather feeds or run a production big data or machine learning pipeline. See the [data source plan](weather_ps/docs/data-sources.md) and [technical architecture](weather_ps/docs/architecture.md) for proposed integrations and infrastructure.
+**Demo data notice:** Reports, metrics, and source activity currently use deterministic simulated data. The prototype demonstrates the intended workflows; it does not yet connect to live weather feeds or run a production big data or machine learning pipeline.
 
 ## Technology stack
 
@@ -64,40 +64,32 @@ These are documented architecture choices, not components currently running in t
 - **Live dashboard updates:** Server-Sent Events (SSE) or WebSockets
 - **Observability:** OpenTelemetry, Prometheus, and Grafana
 
-See the [technical architecture](weather_ps/docs/architecture.md) for the reference pipeline, data model, and security considerations.
+## Proposed platform architecture
 
-## Run the prototype locally
+The diagram below shows the planned flow from multi-source reports to verified weather intelligence. It represents the proposed production architecture; the current prototype uses simulated data.
 
-**Requirements:** Node.js and npm.
+```mermaid
+flowchart TD
+    subgraph sources[Weather information sources]
+        official[Official feeds and APIs]
+        datasets[Public datasets and websites]
+        social[Social media and news]
+        citizen[Citizen reports]
+    end
 
-```bash
-cd weather_ps/next
-npm install
-npm run dev
+    official --> ingest[Connectors and ingestion]
+    datasets --> ingest
+    social --> ingest
+    citizen --> ingest
+
+    ingest --> normalize[Normalize text, time, location, and media]
+    normalize --> enrich[Event detection and metadata extraction]
+    enrich --> verify[AI-assisted verification and source trust]
+    verify --> dedup[Spatio-temporal clustering and duplicate handling]
+    dedup --> review{Verification and impact policy}
+    review -->|Needs analyst review| admin[Admin review queue]
+    review -->|Meets publish policy| store[Geospatial store, search, and analytics]
+    admin --> store
+    store --> dashboard[Maps, dashboards, trends, and alerts]
+    store --> exports[APIs and research exports]
 ```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-To enable Google Cloud Translation, copy `weather_ps/next/.env.example` to `weather_ps/next/.env.local` and configure the server-only `GOOGLE_TRANSLATE_API_KEY`. The bundled translations work without this key.
-
-Other available commands, run from `weather_ps/next`:
-
-```bash
-npm run lint
-npm run build
-npm run start
-```
-
-## Project documentation
-
-- [Product brief](weather_ps/docs/product-brief.md) — problem framing, users, and success metrics
-- [Technical architecture](weather_ps/docs/architecture.md) — proposed pipeline, data model, scale, and governance
-- [Data source plan](weather_ps/docs/data-sources.md) — intended official and public integrations
-- [Demo script](weather_ps/docs/demo-script.md) — walkthrough and sample judge questions
-- [Prototype README](weather_ps/README.md) — dashboard setup and implementation notes
-
----
-
-**SIH problem statement:** SIH26069-Weather
-**Team:** Team Pony
-**Platform:** National Weather Big Data Analytics Platform
