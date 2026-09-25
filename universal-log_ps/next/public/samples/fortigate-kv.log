@@ -1,1 +1,0 @@
-date=2026-09-24 time=15:49:02 devname="FGT-BORDER-01" devid="FG100FTK21000001" type="traffic" subtype="forward" level="warning" srcip=10.12.4.81 srcport=59182 dstip=192.0.2.90 dstport=53 proto=17 action="deny" service="DNS" msg="Denied DNS request"
