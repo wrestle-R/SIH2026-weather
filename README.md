@@ -7,6 +7,31 @@
 
 Varunetra is a weather intelligence platform concept for India. It brings together reports from official services, public datasets, websites, social media, and citizens, then helps teams turn that fragmented information into structured, actionable weather events.
 
+## Live demo
+
+[Open the deployed Weather Admin dashboard](https://weather-admin-teampony.vercel.app)
+
+## Local setup
+
+The web prototype lives in `weather_ps/next` and requires Node.js with npm.
+
+```bash
+cd weather_ps/next
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser. The `.env.local` file is optional for the core demo; add `GOOGLE_TRANSLATE_API_KEY` there to enable Google Cloud Translation for Hindi and Marathi.
+
+Useful commands:
+
+```bash
+npm run lint   # lint the application
+npm run build  # create a production build
+npm run start  # serve the production build
+```
+
 ## The problem
 
 Weather information is spread across many sources and formats. During a developing event, reports can be unstructured, duplicated, delayed, or misleading. Analysts need a way to find relevant signals, understand their reliability, and build a clear picture of what is happening.
